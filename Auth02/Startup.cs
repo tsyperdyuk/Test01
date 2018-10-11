@@ -29,7 +29,14 @@ namespace Auth02
         {
             services.AddOptions();
             services.AddDbContext<AppIdentityDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();         
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+            }).AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();         
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
