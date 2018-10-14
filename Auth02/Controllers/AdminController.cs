@@ -18,7 +18,7 @@ namespace Auth02.Controllers
         }
 
         public ViewResult Index()
-        {           
+        {
             return View(userManager.Users);
         }
 
@@ -38,7 +38,8 @@ namespace Auth02.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
-                } else
+                }
+                else
                 {
                     foreach (IdentityError error in result.Errors)
                     {
@@ -48,5 +49,33 @@ namespace Auth02.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            AppUser user = await userManager.FindByIdAsync(id);
+            if(user != null)
+            {
+                IdentityResult result = await userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                } else  {
+                    AddErrorsFromResult(result);
+                }
+            } else {
+                ModelState.AddModelError("", "User not found");
+            }
+            return View("Index", userManager.Users);
+        }
+
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach(IdentityError error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+        }
+
     }
 }
