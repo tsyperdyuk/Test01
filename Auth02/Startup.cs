@@ -32,7 +32,7 @@ namespace Auth02
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
             services.AddDbContext<AppIdentityDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<AppUser, IdentityRole>(options =>
-            {
+            {               
                 options.Password.RequiredLength = 3;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
