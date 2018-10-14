@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Auth02.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Auth02.Infrastructure;
 
 namespace Auth02
 {
@@ -28,6 +29,7 @@ namespace Auth02
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
             services.AddDbContext<AppIdentityDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
